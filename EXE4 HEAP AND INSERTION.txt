@@ -1,0 +1,88 @@
+
+HEAPSORT
+#include <iostream>
+using namespace std;
+int main()
+{
+    int H[100], n, s;
+    int k, j, v;
+    bool heap;
+
+    cout << "Enter the no of elements: ";
+    cin >> n;
+    s = n;
+
+    cout << "Enter the elements:\n";
+    for (int i = 1; i <= n; i++)
+    {
+        cin >> H[i];
+    }
+
+       for (int i = n / 2; i >= 1; i--)
+   {
+        k = i;
+       v = H[k];
+        heap = false;
+        while (!heap && 2 * k <= n) {
+           j = 2 * k;
+            if (j < n && H[j] < H[j + 1])
+           {
+               j = j + 1;
+            }
+            if (v >= H[j])
+               heap = true;
+            else {
+                H[k] = H[j];
+                k = j;
+            }
+       }
+        H[k] = v;
+    }
+
+  cout<<"the elements inserted in the heap:\n";
+  for(int i=1;i<=s;i++)
+  {
+     cout<<H[i]<<"    ";
+  }
+  cout<<endl;
+
+  int c = n;
+    for (int i = s; i > 1; i--) {
+
+      int temp = H[1];
+        H[1] = H[i];
+        H[i] = temp;
+
+        c--;
+        k = 1;
+        v = H[k];
+       heap = false;
+        while (!heap && 2 * k <= c) {
+            j = 2 * k;
+            if (j < c && H[j] < H[j + 1])
+       {
+               j = j + 1;
+            }
+        if (v >= H[j])
+            {
+               heap = true;
+            }
+            else {
+                H[k] = H[j];
+                k = j;
+           }
+        }
+        H[k] = v;
+    }
+
+    cout << "The sorted array is:\n";
+    for (int i = 1; i <= s; i++)
+    {
+        cout << H[i] << "    ";
+    }
+    cout << endl;
+
+    return 0;
+}
+
+INSERTION SORT
