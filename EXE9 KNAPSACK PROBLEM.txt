@@ -1,0 +1,133 @@
+KNAPSACK PROBLEM
+#include <iostream>
+#include <queue>
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+struct Item {
+    int weight, profit, index;
+};
+
+struct Node {
+    int level, profit, weight;
+    double bound;
+    vector<int> taken;  // track selected items
+};
+
+// Sort by profit/weight ratio
+bool cmp(Item a, Item b) {
+    return (double)a.profit / a.weight > (double)b.profit / b.weight;
+}
+
+// Bound calculation
+double bound(Node u, int n, int W, Item arr[]) {
+    if (u.weight >= W)
+        return 0;
+
+    double profit_bound = u.profit;
+    int j = u.level + 1;
+    int totweight = u.weight;
+
+    while (j < n && totweight + arr[j].weight <= W) {
+        totweight += arr[j].weight;
+        profit_bound += arr[j].profit;
+        j++;
+    }
+
+    if (j < n)
+        profit_bound += (W - totweight) *
+                        ((double)arr[j].profit / arr[j].weight);
+
+    return profit_bound;
+}
+
+void knapsack(int W, Item arr[], int n) {
+    sort(arr, arr + n, cmp);
+
+    queue<Node> Q;
+    Node u, v;
+
+    v.level = -1;
+    v.profit = 0;
+    v.weight = 0;
+    v.taken = vector<int>(n, 0);
+    v.bound = bound(v, n, W, arr);
+
+    Q.push(v);
+
+    int maxProfit = 0;
+    vector<int> bestTaken;
+
+    while (!Q.empty()) {
+        v = Q.front();
+        Q.pop();
+
+        if (v.level == n - 1)
+            continue;
+
+        u.level = v.level + 1;
+
+        // INCLUDE item
+        u.weight = v.weight + arr[u.level].weight;
+        u.profit = v.profit + arr[u.level].profit;
+        u.taken = v.taken;
+        u.taken[u.level] = 1;
+
+        if (u.weight <= W && u.profit > maxProfit) {
+            maxProfit = u.profit;
+            bestTaken = u.taken;
+        }
+
+        u.bound = bound(u, n, W, arr);
+        if (u.bound > maxProfit)
+            Q.push(u);
+
+        // EXCLUDE item
+        u.weight = v.weight;
+        u.profit = v.profit;
+        u.taken = v.taken;
+        u.taken[u.level] = 0;
+
+        u.bound = bound(u, n, W, arr);
+        if (u.bound > maxProfit)
+            Q.push(u);
+    }
+
+    // 🔥 OUTPUT SECTION
+    cout << "\nMaximum Profit = " << maxProfit << endl;
+
+    int totalWeight = 0;
+    cout << "Selected items (weight, profit):\n";
+
+    for (int i = 0; i < n; i++) {
+        if (bestTaken[i] == 1) {
+            cout << "(" << arr[i].weight << ", " << arr[i].profit << ")\n";
+            totalWeight += arr[i].weight;
+        }
+    }
+
+    cout << "Total Weight = " << totalWeight << endl;
+}
+
+int main() {
+    int n, W;
+
+    cout << "Enter number of items: ";
+    cin >> n;
+
+    Item arr[n];
+
+    cout << "Enter weight and profit of each item:\n";
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i].weight >> arr[i].profit;
+        arr[i].index = i + 1;
+    }
+
+    cout << "Enter capacity of knapsack: ";
+    cin >> W;
+
+    knapsack(W, arr, n);
+
+    return 0;
+}
