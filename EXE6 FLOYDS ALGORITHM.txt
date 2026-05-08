@@ -1,0 +1,61 @@
+Floyd ALGORITHM
+#include <iostream>
+#include <vector>
+#include <iomanip>
+
+using namespace std;
+
+// Define a large value for infinity
+#define INF 99999
+void floydWarshall(int n, vector<vector<int>>& dist) {
+    // k is the intermediate vertex
+    for (int k = 0; k < n; k++) {
+        // i is the source vertex
+        for (int i = 0; i < n; i++) {
+            // j is the destination vertex
+            for (int j = 0; j < n; j++) {
+                // If vertex k is on the shortest path from i to j,
+                // then update the value of dist[i][j]
+                if (dist[i][k] != INF && dist[k][j] != INF) {
+                    if (dist[i][k] + dist[k][j] < dist[i][j]) {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Helper function to print the distance matrix
+void printMatrix(int n, const vector<vector<int>>& dist) {
+    cout << "\nShortest distance matrix between every pair of vertices:\n";
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (dist[i][j] == INF)
+                cout << setw(5) << "INF";
+            else
+                cout << setw(5) << dist[i][j];
+        }
+        cout << endl;
+    }
+}
+
+int main() {
+    int n;
+    cout << "Enter the number of vertices: ";
+    cin >> n;
+
+    vector<vector<int>> dist(n, vector<int>(n));
+
+    cout << "Enter the adjacency matrix (use " << INF << " for infinity):\n";
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cin >> dist[i][j];
+        }
+    }
+
+    floydWarshall(n, dist);
+    printMatrix(n, dist);
+
+    return 0;
+}
