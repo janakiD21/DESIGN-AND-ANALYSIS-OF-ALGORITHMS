@@ -1,0 +1,112 @@
+CLOSET PAIROF POINTS
+#include<iostream>
+#include<cmath>
+using namespace std;
+int main()
+{
+    int n, i, j;
+    float x[20], y[20];
+    float d, dist;
+    int p1 = 0, p2 = 1;
+
+    cout << "Enter number of points (n >= 2): ";
+    cin >> n;
+
+    for (i = 0; i < n; i++)
+    {
+        cout << "Enter x" << i + 1 << " and y" << i + 1 << ": ";
+        cin >> x[i] >> y[i];
+    }
+    d = sqrt((x[0] - x[1]) * (x[0] - x[1]) +
+             (y[0] - y[1]) * (y[0] - y[1]));
+
+
+    for (i = 0; i < n - 1; i++)
+    {
+        for (j = i + 1; j < n; j++)
+        {
+            dist = sqrt((x[i] - x[j]) * (x[i] - x[j]) +
+                        (y[i] - y[j]) * (y[i] - y[j]));
+            cout<<"P"<<i+1 <<"("<<x[i]<<","<<y[i]<<") and "<<"P"<< j+1 << "("<<x[j]<< "," <<y[j] <<")\n";
+            cout<<"distance: "<<dist<<"\n";
+
+            if (dist < d)
+            {
+                d = dist;
+                p1 = i;
+                p2 = j;
+            }
+        }
+    }
+
+    cout << "\nClosest pair of points:\n";
+    cout << "P" << p1 + 1 << " (" << x[p1] << ", " << y[p1] << ") and "
+         << "P" << p2 + 1 << " (" << x[p2] << ", " << y[p2] << ")\n";
+
+    cout << "Minimum distance = " << d << endl;
+
+    return 0;
+}
+
+
+//PATTERN MATCHING
+# include<string>
+#include<iostream>
+
+using namespace std;
+void Search(char text[100],char pattern[100])
+{
+   int n=0,m=0;
+   while(text[n]!='\0')
+   {
+      n++;
+   }
+   while(pattern[m]!='\0')
+   {
+      m++;
+   }
+  // int n=text.length();
+  // int m=pattern.length();
+   bool found=false;
+   int i=0,j=0;
+   while(i<n)
+         {
+         if(j==m)
+         {
+            found=true;
+            break;
+         }
+         if(text[i]==pattern[j])
+         {
+            i++;
+            j++;
+         }
+
+      else
+       {
+          i++;
+          j=0;
+        }
+       }
+
+
+
+   if(found)
+   {
+      cout<<"pattern found in the text at the index"<<i-m<<endl;
+   }
+   else
+   {
+      cout<<"patern not found in the text"<<endl;
+   }
+}
+int main()
+{
+   char text[100],pattern[100];
+   cout<<"Enter the text:";
+   cin.getline(text,100);
+   cout<<"enter the pattern:";
+   cin.getline(pattern,100);
+   Search(text,pattern);
+   return 0;
+}
